@@ -7,20 +7,20 @@ import web3, { nftTransferHistory } from "../dapp/alchemy";
 import Moralis from "../dapp/molaris";
 import NFTImage from "./NFTImage";
 
-const RecentBoughtNFT = () => {
-  const { data } = useAccount();
+const RecentBoughtNFT = ({ address }) => {
+  // const { data } = useAccount();
   const [nfts, setNFT] = useState([]);
   const { data: blockNo } = useBlockNumber();
 
   useEffect(() => {
-    if (data) {
+    if (address) {
       Moralis.Web3API.account
         .getNFTTransfers({
           chain: "mumbai",
           format: "decimal",
           direction: "to",
           limit: 10,
-          address: data.address,
+          address,
         })
         .then((data) => {
           console.log(data);
@@ -31,11 +31,11 @@ const RecentBoughtNFT = () => {
           // setNFT(result);
         });
     }
-  }, [data, blockNo]);
+  }, [address, blockNo]);
 
   return (
     <div className="my-8">
-      <h2 className="mb-4 text-2xl">My Recent Bought NFT</h2>
+      <h2 className="mb-4 text-2xl">Recent Bought NFT</h2>
       <div className="grid grid-cols-5 gap-3">
         {nfts.map((item) => (
           <div key={item.token_id} className="shadow-xl card bg-base-100">
