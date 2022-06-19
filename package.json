@@ -12,9 +12,10 @@
     "compile": "hardhat compile",
     "deploy-local": "hardhat run scripts/deploy.ts --network localhost",
     "deploy-test": "hardhat run scripts/deploy.ts --network testnet",
-    "verify-test": "hardhat verify --constructor-args arguments.js 0x9b582899f3fE6D25D84AE4143eAbB817281a3E59 --network testnet"
+    "verify-test": "hardhat verify --constructor-args arguments.js --network testnet"
   },
   "dependencies": {
+    "@alch/alchemy-web3": "^1.4.2",
     "@chainlink/contracts": "^0.4.1",
     "@ethersproject/providers": "5.5.0",
     "@ethersproject/units": "5.5.0",
@@ -35,6 +36,7 @@
     "react-animated-numbers": "^0.7.0",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.18.0",
+    "wagmi": "^0.4.12",
     "web3-react": "5.0.5"
   },
   "devDependencies": {
@@ -68,7 +70,7 @@
     "eslint-plugin-react": "7.26.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "ethereum-waffle": "3.4.0",
-    "ethers": "5.5.1",
+    "ethers": "^5.6.9",
     "hardhat": "2.9.9",
     "hardhat-gas-reporter": "1.0.4",
     "husky": "7.0.4",

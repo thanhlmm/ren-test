@@ -1,17 +1,41 @@
 //SPDX-License-Identifier: Unlicense
 pragma solidity ^0.8.0;
 
-import { ERC721 } from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import { Ownable } from "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 
-contract DumpNFT is ERC721, ERC721Burnable, Ownable {
-	constructor(string memory name_, string memory symbol_)
-		public
-		ERC721(name_, symbol_)
-	{}
+contract DumpNFT is ERC721, ERC721URIStorage, ERC721Burnable, Ownable {
+	using Counters for Counters.Counter;
 
-	function mint(address _to, uint256 _tokenId) public onlyOwner {
-		_safeMint(_to, _tokenId);
+	Counters.Counter private _tokenIdCounter;
+
+	constructor() ERC721("DumpNFT", "DNFT") {}
+
+	function safeMint(address to, string memory uri) public onlyOwner {
+		uint256 tokenId = _tokenIdCounter.current();
+		_tokenIdCounter.increment();
+		_safeMint(to, tokenId);
+		_setTokenURI(tokenId, uri);
+	}
+
+	// The following functions are overrides required by Solidity.
+
+	function _burn(uint256 tokenId)
+		internal
+		override(ERC721, ERC721URIStorage)
+	{
+		super._burn(tokenId);
+	}
+
+	function tokenURI(uint256 tokenId)
+		public
+		view
+		override(ERC721, ERC721URIStorage)
+		returns (string memory)
+	{
+		return super.tokenURI(tokenId);
 	}
 }

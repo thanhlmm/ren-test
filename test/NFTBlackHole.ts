@@ -21,7 +21,7 @@ describe('Receiver ERC721', async () => {
     console.log('User address: ', user.address);
 
     const DumpNFT = await ethers.getContractFactory('DumpNFT');
-    dumpNFT = await DumpNFT.connect(deployer).deploy('DumpNFT', 'Item');
+    dumpNFT = await DumpNFT.connect(deployer).deploy();
     console.log("DumpNFT address: ", dumpNFT.address);
 
     const NFTBlackHole = await ethers.getContractFactory('NFTBlackHole');
@@ -30,8 +30,8 @@ describe('Receiver ERC721', async () => {
   });
 
   it('Send NFT to contract', async () => {
-    await dumpNFT.connect(deployer).mint(user.address, tokenId1);
-    await dumpNFT.connect(deployer).mint(user.address, tokenId2);
+    await dumpNFT.connect(deployer).safeMint(user.address, "ipfs://bafkreiavtskjp5mvvcxzfvywivjkzm4rd3mp5athisnkxangw5ctzyiwaa");
+    await dumpNFT.connect(deployer).safeMint(user.address, "ipfs://bafkreiavtskjp5mvvcxzfvywivjkzm4rd3mp5athisnkxangw5ctzyiwaa");
 
     await dumpNFT
       .connect(user)

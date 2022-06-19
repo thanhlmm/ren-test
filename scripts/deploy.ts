@@ -18,8 +18,20 @@ async function main() {
   const NFTBlackHole = await hre.ethers.getContractFactory("NFTBlackHole");
   const nftBlackHole = await NFTBlackHole.deploy(); // BUSD
   await nftBlackHole.deployed();
-
   console.log("NFTBlackHole deployed to:", nftBlackHole.address);
+
+  // TODO: Only deploy NFT on testnet
+  const DumpNFT = await hre.ethers.getContractFactory("DumpNFT");
+  const dumpNFT = await DumpNFT.deploy();
+  await dumpNFT.deployed();
+  console.log("DumpNFT deployed to:", dumpNFT.address);
+
+  await dumpNFT.safeMint(process.env.PUBLIC_KEY, "ipfs://bafkreiavtskjp5mvvcxzfvywivjkzm4rd3mp5athisnkxangw5ctzyiwaa");
+  await dumpNFT.safeMint(process.env.PUBLIC_KEY, "ipfs://bafkreiaft6wptryxsj5r24xpqph4hjfn6dsded7663woj55fljsemg3beu");
+  await dumpNFT.safeMint(process.env.PUBLIC_KEY, "ipfs://bafkreid77dvqoqpicaze4y5n45emfyrt7lxmopptzbpyaspz5o3tzdhuha");
+
+  console.log("Done create 3 dump NFT");
+
 }
 
 // We recommend this pattern to be able to use async/await everywhere

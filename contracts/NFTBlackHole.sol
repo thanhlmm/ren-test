@@ -9,7 +9,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@chainlink/contracts/src/v0.8/KeeperCompatible.sol";
 
 // TODO: Pausable contract
-// TODO: Fallback function to withdrawl all NFT
+// TODO: Fallback function to withdraw all NFT
 
 contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 	struct NFTOwner {
@@ -24,7 +24,6 @@ contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 	NFTOwner[] public nftList;
 	uint256 lastIndexAccesable = 0; // Use this varible to save some compute time
 
-	event NFTDeposit(address indexed _from, uint256 _tokenId);
 	event NFTDestroy(
 		address indexed _owner,
 		address indexed _collection,
@@ -35,19 +34,19 @@ contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 		owner = msg.sender;
 	}
 
-	function mineNFTs() public view returns (NFTOwner[] memory) {
+	function mineNFTs(address owner) public view returns (NFTOwner[] memory) {
 		// 2 loops which is bad. https://stackoverflow.com/questions/60616895/solidity-returns-filtered-array-of-structs-without-push
 		// But it's ok since this is view function
 		uint256 resultCount;
 		for (uint256 i = 0; i < nftList.length; i++) {
-			if (nftList[i].owner == msg.sender) {
+			if (nftList[i].owner == owner) {
 				resultCount++;
 			}
 		}
 		NFTOwner[] memory userNft = new NFTOwner[](resultCount);
 		uint256 j;
 		for (uint256 i = 0; i < nftList.length; i++) {
-			if (nftList[i].owner == msg.sender) {
+			if (nftList[i].owner == owner) {
 				userNft[j] = nftList[i];
 				j++;
 			}
@@ -58,6 +57,7 @@ contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 
 	function getNFT(address collection, uint256 tokenId)
 		public
+		view
 		returns (NFTOwner memory, uint256 index)
 	{
 		for (uint256 i = lastIndexAccesable; i < nftList.length; i++) {
@@ -88,15 +88,18 @@ contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 		uint256 tokenId,
 		bytes calldata data
 	) external override returns (bytes4) {
-		emit NFTDeposit(from, tokenId);
-
+		// TODO: What if someone else call this function? Do we need to double check with NFT contract?
 		uint256 expireBlock = block.number + EXPIRED_BLOCK_TIME;
-		nftList.push(NFTOwner(from, msg.sender, tokenId, expireBlock, true));
+		NFTOwner memory nft = NFTOwner(
+			from,
+			msg.sender,
+			tokenId,
+			expireBlock,
+			true
+		);
+		nftList.push(nft);
 
-		return
-			bytes4(
-				keccak256("onERC721Received(address,address,uint256,bytes)")
-			);
+		return this.onERC721Received.selector;
 	}
 
 	function checkUpkeep(
