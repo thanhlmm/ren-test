@@ -35,3 +35,8 @@ We still have some work-around ways to do this:
 
 - Implement a logic to block withdrawal of an NFT after 15 mins and have a method to burn that NFTs for real. This is the simplest way to do but it can not trigger any Event at that time so if we don’t have any intentions with destroy Event, I think we’re good to go this way.
 - Use some other 3rd party that can solve this scenario like [Chainlink Keeper](https://chain.link/keepers), [Gelato](https://www.gelato.network/), or ****[Ethereum Alarm Clock](https://ethereum-alarm-clock-service.readthedocs.io/en/latest/#).** To be honest, I don’t have any experience with them, but after some quick research I believed that ChainLink Keeper is the best fit since it is Industry Leader for Oracle and works very well in similar scenarios
+
+
+# Result
+Result: https://ren-test.vercel.app/
+**Note: This app using Polygon Testnet**
