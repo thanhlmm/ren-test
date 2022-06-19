@@ -4,6 +4,7 @@ import { useAccount, useBlockNumber, useContract, useContractRead, useSigner } f
 
 import BlackHoleABI from "../artifacts/contracts/NFTBlackHole.sol/NFTBlackHole.json";
 import Countdown from "./Countdown";
+import NFTImage from "./NFTImage";
 
 const items = [1, 2, 3];
 
@@ -51,7 +52,6 @@ const BlackHole = () => {
           collection,
           tokenId,
           expiredBlock,
-          expiredTime: dayjs().add((expiredBlock.toNumber() - blockNo.valueOf()) * 2.3, "second"),
         }));
     }
 
@@ -82,26 +82,25 @@ const BlackHole = () => {
         </div>
       )}
       <div className="grid grid-cols-5 gap-3">
-        {nfts.map((item) => (
-          <div key={`${item.collection}_${item.tokenId.toNumber()}`} className="shadow-xl card bg-base-100">
-            <figure>
-              <img src="https://api.lorem.space/image/shoes?w=400&h=225" alt="Shoes" />
-            </figure>
-            <div className="p-3 card-body">
-              <h2 className="card-title">Item #{item.tokenId.toNumber()}</h2>
-              <Countdown date={getTime(item.expiredBlock, blockNo.valueOf())} />
-              <div>until it get burned 🔥</div>
-              <div className="justify-end card-actions">
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => returnNFT(item.collection, item.tokenId.toString())}
-                >
-                  Withdraw
-                </button>
+        {blockNo &&
+          nfts.map((item) => (
+            <div key={`${item.collection}_${item.tokenId.toNumber()}`} className="shadow-xl card bg-base-100">
+              <NFTImage collection={item.collection} tokenId={item.tokenId.toString()} />
+              <div className="p-3 card-body">
+                <h2 className="card-title">Item #{item.tokenId.toNumber()}</h2>
+                <Countdown date={getTime(item.expiredBlock, blockNo.valueOf())} />
+                <div>until it get burned 🔥</div>
+                <div className="justify-end card-actions">
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => returnNFT(item.collection, item.tokenId.toString())}
+                  >
+                    Withdraw
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

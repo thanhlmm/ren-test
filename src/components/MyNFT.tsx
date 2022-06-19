@@ -30,7 +30,10 @@ const BurnBtn = ({ collection, owner, tokenId }) => {
 const MyNFT = () => {
   const { data } = useAccount();
   const [nfts, setNFT] = useState([]);
-  const { data: blockNo } = useBlockNumber();
+  const { data: blockNo } = useBlockNumber({
+    watch: false,
+    staleTime: 15000, // 15 sec
+  });
 
   useEffect(() => {
     if (data) {
