@@ -20,7 +20,7 @@ contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 		bool burnable;
 	}
 	uint256 public constant EXPIRED_BLOCK_TIME = 391; // 15 mins. Polygon has BlockTime ~ 2.3s
-	// uint256 public constant EXPIRED_BLOCK_TIME = 10; // 15 mins. Polygon has BlockTime ~ 2.3s
+	// uint256 public constant EXPIRED_BLOCK_TIME = 5; // 15 mins. Polygon has BlockTime ~ 2.3s
 	address public owner;
 	NFTOwner[] public nftList;
 	uint256 lastIndexAccesable = 0; // Use this varible to save some compute time
@@ -126,11 +126,11 @@ contract NFTBlackHole is IERC721Receiver, KeeperCompatibleInterface {
 	}
 
 	function performUpkeep(bytes calldata data) external override {
-		uint256 blockExec = abi.decode(data, (uint256));
-		require(blockExec < block.number, "Can only clean expired");
-		require(blockExec > 0, "No block to clean");
+		// uint256 blockExec = abi.decode(data, (uint256));
+		// require(blockExec < block.number, "Can only clean expired");
+		// require(blockExec > 0, "No block to clean");
 		for (uint256 i = lastIndexAccesable; i < nftList.length; i++) {
-			if (nftList[i].burnable && nftList[i].expiredBlock <= blockExec) {
+			if (nftList[i].burnable && nftList[i].expiredBlock < block.number) {
 				nftList[i].burnable = false;
 				lastIndexAccesable = i; // Save last time delete index
 				ERC721Burnable recipient = ERC721Burnable(
