@@ -1,13 +1,9 @@
 import { providers } from "ethers";
+import dynamic from "next/dynamic";
 import Head from "next/head";
-import { WagmiConfig, createClient, configureChains, chain } from "wagmi";
+import { WagmiConfig, createClient } from "wagmi";
 
-import Demo from "../components/Demo";
-
-// const { chains, provider } = configureChains(defaultChains, [
-//   alchemyProvider({ alchemyId }),
-//   publicProvider(),
-// ])
+const Demo = dynamic(() => import("../components/Demo"), { ssr: false });
 
 const client = createClient({
   autoConnect: true,
