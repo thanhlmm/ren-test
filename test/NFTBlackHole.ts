@@ -1,14 +1,6 @@
 import { expect } from "chai";
 import { ethers, network } from "hardhat";
 
-import IERC20 from "../src/artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json";
-import { formatUnits, parseUnits } from "@ethersproject/units";
-import { BigNumber } from "@ethersproject/contracts/node_modules/@ethersproject/bignumber";
-
-const convertNumber = (input: BigNumber, fixed: number = 3): string => {
-  return Number(formatUnits(input)).toFixed(fixed)
-}
-
 describe('Receiver ERC721', async () => {
   let dumpNFT, nftBlackHole;
   let deployer, user;
