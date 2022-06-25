@@ -1,14 +1,14 @@
 import { providers } from "ethers";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { WagmiConfig, createClient } from "wagmi";
+import { WagmiConfig, createClient, chainId } from "wagmi";
 
 const Demo = dynamic(() => import("../components/Demo"), { ssr: false });
 
 const client = createClient({
   autoConnect: true,
   provider(config) {
-    return new providers.AlchemyProvider(config.chainId, process.env.NEXT_PUBLIC_ALCHEMMY_KEY);
+    return new providers.AlchemyProvider(chainId.polygonMumbai, process.env.NEXT_PUBLIC_ALCHEMMY_KEY);
   },
 });
 
